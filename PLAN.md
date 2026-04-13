@@ -120,3 +120,18 @@ export const documents = pgTable("documents", {
 
 - [ ] Write `README.md` documenting how to run the app locally, environment variables needed, and how the Yjs service is provisioned.
 - [ ] Request a code review via `REVIEW_REQUEST` message in the room.
+
+---
+
+## Phase 7: Bug Fix — Editor Stuck in "Connecting" State (added)
+
+**User report:** The document editor gets stuck in a "connecting" state and never becomes editable.
+
+This is almost certainly the Yjs provider failing to establish a connection to the Durable Streams service. Investigate and fix the following:
+
+- [ ] **Check provider status display:** Read the current provider connection state in the editor component. If a "connecting…" indicator is shown, verify it reacts to actual provider events (connected, disconnected, synced) rather than being a static placeholder.
+- [ ] **Verify the Yjs proxy route is reachable:** Open `src/routes/api/yjs-proxy.ts` (or equivalent). Confirm the route correctly forwards requests — including the `Authorization: Bearer <secret>` header — to the Durable Streams Yjs service URL. Log or trace the proxy to confirm requests are arriving and a non-error HTTP status is returned.
+- [ ] **Confirm env vars are populated at runtime:** Check that `VITE_YJS_SERVICE_URL` (or equivalent) and the secret key are present in the running environment. If either is missing, the provider will silently fail to connect. The coder must verify via `list_secrets` and confirm the `.env` file or process env reflects them.
+- [ ] **Handle provider error / retry:** If the provider emits an error event (bad URL, 401 Unauthorized, network failure), surface it clearly in the UI — replace the "connecting" spinner with an error message and a **Retry** button. Do not leave the user indefinitely waiting.
+- [ ] **Implement a connection timeout:** If the provider has not reached "connected" state within ~10 seconds, transition to an error state with a user-visible message ("Could not connect to the collaboration service — check your connection and try again") and a retry affordance.
+- [ ] **Test with two browser tabs** to confirm that once connected, edits made in one tab appear in the other in real time.
