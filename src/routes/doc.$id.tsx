@@ -97,7 +97,10 @@ function CollabEditor({ docId }: { docId: string }) {
 	useEffect(() => {
 		if (provider.synced) setSynced(true)
 		const handler = (s: boolean) => {
-			if (s) setSynced(true)
+			if (s) {
+				setSynced(true)
+				setConnectionError(null)
+			}
 		}
 		provider.on("synced", handler)
 		const errorHandler = (err: Error) => {
@@ -105,7 +108,15 @@ function CollabEditor({ docId }: { docId: string }) {
 			setConnectionError(err.message)
 		}
 		provider.on("error", errorHandler)
+
+		const timeout = setTimeout(() => {
+			if (!provider.synced) {
+				setConnectionError("Could not connect to the collaboration service — check your connection and try again.")
+			}
+		}, 10_000)
+
 		return () => {
+			clearTimeout(timeout)
 			provider.off("synced", handler)
 			provider.off("error", errorHandler)
 		}
@@ -231,14 +242,25 @@ function CollabEditor({ docId }: { docId: string }) {
 						<div className="flex flex-col items-center justify-center h-[60vh] gap-3 text-muted-foreground">
 							<p>Failed to connect to collaboration service.</p>
 							<p className="text-xs">{connectionError}</p>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => navigate({ to: "/" })}
-								className="mt-2"
-							>
-								Back to Documents
-							</Button>
+							<div className="flex gap-2 mt-2">
+								<Button
+									size="sm"
+									className="bg-[#d0bcff] text-[#1b1b1f] hover:bg-[#c4aef5]"
+									onClick={() => {
+										setConnectionError(null)
+										provider.connect()
+									}}
+								>
+									Retry
+								</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => navigate({ to: "/" })}
+								>
+									Back to Documents
+								</Button>
+							</div>
 						</div>
 					) : !synced ? (
 						<div className="flex items-center justify-center h-[60vh] text-muted-foreground">
