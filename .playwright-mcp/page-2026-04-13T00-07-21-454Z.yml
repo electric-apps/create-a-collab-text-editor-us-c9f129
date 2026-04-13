@@ -1,0 +1,14 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e121]:
+    - banner [ref=e122]:
+      - generic [ref=e123]:
+        - button "Back" [ref=e124]:
+          - img
+          - text: Back
+        - button "QA Test Document" [ref=e125]
+        - generic [ref=e128]:
+          - img [ref=e129]
+          - generic [ref=e134]: "1"
+    - main [ref=e135]:
+      - generic [ref=e137]: Connecting...
+  - region "Notifications alt+T"

@@ -8,59 +8,152 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root"
-import { Route as IndexRouteImport } from "./routes/index"
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocIdRouteImport } from './routes/doc.$id'
+import { Route as ApiDocumentsRouteImport } from './routes/api/documents'
+import { Route as ApiYjsSplatRouteImport } from './routes/api/yjs/$'
+import { Route as ApiDocumentsIdRouteImport } from './routes/api/documents.$id'
 
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DocIdRoute = DocIdRouteImport.update({
+  id: '/doc/$id',
+  path: '/doc/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDocumentsRoute = ApiDocumentsRouteImport.update({
+  id: '/api/documents',
+  path: '/api/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiYjsSplatRoute = ApiYjsSplatRouteImport.update({
+  id: '/api/yjs/$',
+  path: '/api/yjs/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDocumentsIdRoute = ApiDocumentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiDocumentsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute
+  '/': typeof IndexRoute
+  '/api/documents': typeof ApiDocumentsRouteWithChildren
+  '/doc/$id': typeof DocIdRoute
+  '/api/documents/$id': typeof ApiDocumentsIdRoute
+  '/api/yjs/$': typeof ApiYjsSplatRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute
+  '/': typeof IndexRoute
+  '/api/documents': typeof ApiDocumentsRouteWithChildren
+  '/doc/$id': typeof DocIdRoute
+  '/api/documents/$id': typeof ApiDocumentsIdRoute
+  '/api/yjs/$': typeof ApiYjsSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  "/": typeof IndexRoute
+  '/': typeof IndexRoute
+  '/api/documents': typeof ApiDocumentsRouteWithChildren
+  '/doc/$id': typeof DocIdRoute
+  '/api/documents/$id': typeof ApiDocumentsIdRoute
+  '/api/yjs/$': typeof ApiYjsSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/"
+  fullPaths:
+    | '/'
+    | '/api/documents'
+    | '/doc/$id'
+    | '/api/documents/$id'
+    | '/api/yjs/$'
   fileRoutesByTo: FileRoutesByTo
-  to: "/"
-  id: "__root__" | "/"
+  to: '/' | '/api/documents' | '/doc/$id' | '/api/documents/$id' | '/api/yjs/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/documents'
+    | '/doc/$id'
+    | '/api/documents/$id'
+    | '/api/yjs/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiDocumentsRoute: typeof ApiDocumentsRouteWithChildren
+  DocIdRoute: typeof DocIdRoute
+  ApiYjsSplatRoute: typeof ApiYjsSplatRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/doc/$id': {
+      id: '/doc/$id'
+      path: '/doc/$id'
+      fullPath: '/doc/$id'
+      preLoaderRoute: typeof DocIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/documents': {
+      id: '/api/documents'
+      path: '/api/documents'
+      fullPath: '/api/documents'
+      preLoaderRoute: typeof ApiDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/yjs/$': {
+      id: '/api/yjs/$'
+      path: '/api/yjs/$'
+      fullPath: '/api/yjs/$'
+      preLoaderRoute: typeof ApiYjsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/documents/$id': {
+      id: '/api/documents/$id'
+      path: '/$id'
+      fullPath: '/api/documents/$id'
+      preLoaderRoute: typeof ApiDocumentsIdRouteImport
+      parentRoute: typeof ApiDocumentsRoute
     }
   }
 }
 
+interface ApiDocumentsRouteChildren {
+  ApiDocumentsIdRoute: typeof ApiDocumentsIdRoute
+}
+
+const ApiDocumentsRouteChildren: ApiDocumentsRouteChildren = {
+  ApiDocumentsIdRoute: ApiDocumentsIdRoute,
+}
+
+const ApiDocumentsRouteWithChildren = ApiDocumentsRoute._addFileChildren(
+  ApiDocumentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiDocumentsRoute: ApiDocumentsRouteWithChildren,
+  DocIdRoute: DocIdRoute,
+  ApiYjsSplatRoute: ApiYjsSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx"
-import type { createStart } from "@tanstack/react-start"
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
