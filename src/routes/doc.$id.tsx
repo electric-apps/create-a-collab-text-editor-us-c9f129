@@ -92,8 +92,9 @@ function CollabEditor({ docId }: { docId: string }) {
 		}
 	}, [provider, awareness, ydoc])
 
-	const [synced, setSynced] = useState(false)
+	const [synced, setSynced] = useState(() => provider.synced)
 	useEffect(() => {
+		if (provider.synced) setSynced(true)
 		const handler = (s: boolean) => {
 			if (s) setSynced(true)
 		}
