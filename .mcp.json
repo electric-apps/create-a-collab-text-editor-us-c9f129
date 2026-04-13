@@ -3,6 +3,23 @@
     "session": {
       "type": "http",
       "url": "http://localhost:3456/mcp"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--headless",
+        "--no-sandbox",
+        "--ignore-https-errors",
+        "--isolated",
+        "--executable-path",
+        "/ms-playwright/chromium_headless_shell-1217/chrome-linux/headless_shell"
+      ],
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright"
+      }
     }
   }
 }

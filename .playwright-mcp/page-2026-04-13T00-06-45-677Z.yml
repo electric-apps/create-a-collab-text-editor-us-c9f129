@@ -1,0 +1,44 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e59]:
+    - banner [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - img [ref=e63]
+          - heading "Collab Editor" [level=1] [ref=e66]
+        - button "New Document" [ref=e67]:
+          - img
+          - text: New Document
+    - main [ref=e68]:
+      - generic [ref=e69]:
+        - heading "Documents" [level=2] [ref=e70]
+        - generic [ref=e71]:
+          - generic [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]:
+              - img [ref=e75]
+              - generic [ref=e78]: QA Test Document
+            - generic [ref=e79]: just now
+          - generic [ref=e81] [cursor=pointer]:
+            - generic [ref=e82]:
+              - img [ref=e83]
+              - generic [ref=e86]: Test Doc
+            - generic [ref=e87]: 1m ago
+          - generic [ref=e89] [cursor=pointer]:
+            - generic [ref=e90]:
+              - img [ref=e91]
+              - generic [ref=e94]: Untitled
+            - generic [ref=e95]: 6m ago
+          - generic [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]:
+              - img [ref=e99]
+              - generic [ref=e102]: Untitled
+            - generic [ref=e103]: 8m ago
+    - contentinfo [ref=e104]:
+      - generic [ref=e105]:
+        - generic [ref=e106]:
+          - img [ref=e107]
+          - generic [ref=e110]:
+            - text: Built with
+            - link "Electric" [ref=e111] [cursor=pointer]:
+              - /url: https://electric-sql.com
+        - generic [ref=e112]: © 2026 Electric SQL
+  - region "Notifications alt+T"

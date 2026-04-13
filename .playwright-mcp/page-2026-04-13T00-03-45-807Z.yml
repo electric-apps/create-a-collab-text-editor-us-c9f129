@@ -1,0 +1,14 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e40]:
+    - banner [ref=e41]:
+      - generic [ref=e42]:
+        - button "Back" [ref=e43]:
+          - img
+          - text: Back
+        - button "Untitled" [ref=e44]
+        - generic [ref=e47]:
+          - img [ref=e48]
+          - generic [ref=e53]: "1"
+    - main [ref=e54]:
+      - generic [ref=e56]: Connecting...
+  - region "Notifications alt+T"
