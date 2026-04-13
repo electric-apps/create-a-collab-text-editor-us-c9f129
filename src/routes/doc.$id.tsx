@@ -143,10 +143,13 @@ function CollabEditor({ docId }: { docId: string }) {
 		},
 	})
 
+	useEffect(() => {
+		if (editingTitle) titleInputRef.current?.focus()
+	}, [editingTitle])
+
 	const handleTitleEdit = () => {
 		setTitleValue(doc?.title ?? "Untitled")
 		setEditingTitle(true)
-		setTimeout(() => titleInputRef.current?.focus(), 0)
 	}
 
 	const handleTitleSave = () => {
@@ -196,8 +199,8 @@ function CollabEditor({ docId }: { docId: string }) {
 					<div className="ml-auto flex items-center gap-2">
 						<TooltipProvider>
 							<div className="flex items-center gap-1">
-								{peers.map((peer, i) => (
-									<Tooltip key={i}>
+								{peers.map((peer) => (
+									<Tooltip key={peer.name}>
 										<TooltipTrigger>
 											<div
 												className="h-7 w-7 rounded-full flex items-center justify-center text-xs font-medium text-[#1b1b1f]"

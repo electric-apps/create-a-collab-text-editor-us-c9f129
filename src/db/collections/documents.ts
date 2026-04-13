@@ -21,6 +21,7 @@ export const documentsCollection = createCollection(
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(newDoc),
 			})
+			if (!res.ok) throw new Error(await res.text())
 			const { txid } = await res.json()
 			return { txid }
 		},
@@ -31,6 +32,7 @@ export const documentsCollection = createCollection(
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ title: updated.title, updated_at: updated.updated_at }),
 			})
+			if (!res.ok) throw new Error(await res.text())
 			const { txid } = await res.json()
 			return { txid }
 		},
@@ -39,6 +41,7 @@ export const documentsCollection = createCollection(
 			const res = await fetch(`/api/documents/${deleted.id}`, {
 				method: "DELETE",
 			})
+			if (!res.ok) throw new Error(await res.text())
 			const { txid } = await res.json()
 			return { txid }
 		},
