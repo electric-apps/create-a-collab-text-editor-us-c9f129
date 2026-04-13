@@ -93,6 +93,7 @@ function CollabEditor({ docId }: { docId: string }) {
 	}, [provider, awareness, ydoc])
 
 	const [synced, setSynced] = useState(() => provider.synced)
+	const [connectionError, setConnectionError] = useState<string | null>(null)
 	useEffect(() => {
 		if (provider.synced) setSynced(true)
 		const handler = (s: boolean) => {
@@ -101,6 +102,7 @@ function CollabEditor({ docId }: { docId: string }) {
 		provider.on("synced", handler)
 		const errorHandler = (err: Error) => {
 			toast.error(`Connection error: ${err.message}`)
+			setConnectionError(err.message)
 		}
 		provider.on("error", errorHandler)
 		return () => {
@@ -225,7 +227,20 @@ function CollabEditor({ docId }: { docId: string }) {
 
 			<main className="flex-1 overflow-auto">
 				<div className="container mx-auto max-w-3xl py-8">
-					{!synced ? (
+					{connectionError ? (
+						<div className="flex flex-col items-center justify-center h-[60vh] gap-3 text-muted-foreground">
+							<p>Failed to connect to collaboration service.</p>
+							<p className="text-xs">{connectionError}</p>
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => navigate({ to: "/" })}
+								className="mt-2"
+							>
+								Back to Documents
+							</Button>
+						</div>
+					) : !synced ? (
 						<div className="flex items-center justify-center h-[60vh] text-muted-foreground">
 							Connecting...
 						</div>
