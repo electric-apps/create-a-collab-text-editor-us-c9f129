@@ -52,11 +52,19 @@ async function proxyYjs({
 		headers: forwardedRequestHeaders,
 		body: hasBody ? request.body : undefined,
 		duplex: "half",
+		redirect: "manual",
 	} as RequestInit)
 
 	const forwardedResponseHeaders = new Headers()
 	for (const [key, value] of upstreamResponse.headers) {
 		if (HOP_BY_HOP.has(key.toLowerCase())) continue
+		if (key.toLowerCase() === "location" && baseUrl) {
+			const basePath = new URL(baseUrl).pathname
+			const locationUrl = new URL(value)
+			const relativePath = locationUrl.pathname.replace(basePath, "/api/yjs") + locationUrl.search
+			forwardedResponseHeaders.set(key, relativePath)
+			continue
+		}
 		forwardedResponseHeaders.set(key, value)
 	}
 
